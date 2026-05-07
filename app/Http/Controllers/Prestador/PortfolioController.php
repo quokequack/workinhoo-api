@@ -39,7 +39,7 @@ class PortfolioController extends Controller
     public function store(Request $request, Prestador $prestador, CriaPortfolio $action): JsonResponse
     {
         $dto = new NovoPortfolioDTO(
-            prestadorID: $prestador->id,
+            prestadorUUID: $prestador->uuid,
             descricao: $request->input('descricao'),
             midia: $request->file('midia'),
         );
@@ -55,7 +55,7 @@ class PortfolioController extends Controller
         Gate::authorize('update', $portfolio);
 
         $dto = new NovoPortfolioDTO(
-            prestadorID: $portfolio->prestador_id,
+            prestadorUUID: $portfolio->prestador->uuid,
             descricao: $request->input('descricao'),
             midia: $request->file('midia'),
         );

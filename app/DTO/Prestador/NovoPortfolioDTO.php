@@ -7,15 +7,15 @@ use Illuminate\Http\UploadedFile;
 final readonly class NovoPortfolioDTO
 {
     public function __construct(
-        public int $prestadorID,
+        public string $prestadorUUID,
         public string $descricao,
         public ?UploadedFile $midia = null, // midia_path será gerado pelo action
     ) {}
 
-    public function toArray(): array
+    public function toArray(int $prestadorID): array
     {
         return [
-            'prestador_id' => $this->prestadorID,
+            'prestador_id' => $prestadorID,
             'descricao' => $this->descricao,
         ];
     }

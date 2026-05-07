@@ -13,7 +13,7 @@ final readonly class ExcluiFotoPortfolio
 
     public function executa(Portfolio $portfolio): Portfolio
     {
-        // Remove o arquivo antigo
+        // não recebe path por midia_path já conter o diretório e nome do arquivo
         $this->arquivo->remove('', $portfolio->midia_path, 'portfolios');
 
         $portfolio->update(['midia_path' => null]);

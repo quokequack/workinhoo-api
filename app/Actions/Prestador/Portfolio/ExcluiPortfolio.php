@@ -15,7 +15,7 @@ final readonly class ExcluiPortfolio
     {
         if ($portfolio->midia_path) {
             $this->arquivo->remove('', $portfolio->midia_path, 'portfolios');
-        }
+        } // não recebe path por midia_path já conter o diretório e nome do arquivo
 
         $portfolio->delete();
     }

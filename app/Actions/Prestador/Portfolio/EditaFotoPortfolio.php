@@ -3,6 +3,7 @@
 namespace App\Actions\Prestador\Portfolio;
 
 use App\Models\Prestador\Portfolio;
+use App\Models\Prestador\Prestador;
 use App\Support\Storage\Arquivo;
 use App\Support\ValueObjects\UUID;
 use Illuminate\Http\UploadedFile;
@@ -20,7 +21,7 @@ final readonly class EditaFotoPortfolio
 
         // Persiste o novo
         $midiaID = UUID::cria();
-        $midiaPath = $this->arquivo->persiste($midia, '', "{$midiaID->recupera()}.webp", ['disk' => 'portfolios']);
+        $midiaPath = $this->arquivo->persiste($midia, $portfolio->prestador->uuid, "{$midiaID->recupera()}.webp", ['disk' => 'portfolios']);
 
         $portfolio->update(['midia_path' => $midiaPath]);
 

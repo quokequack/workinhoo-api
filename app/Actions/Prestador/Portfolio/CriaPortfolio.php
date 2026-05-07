@@ -4,6 +4,7 @@ namespace App\Actions\Prestador\Portfolio;
 
 use App\DTO\Prestador\NovoPortfolioDTO;
 use App\Models\Prestador\Portfolio;
+use App\Models\Prestador\Prestador;
 use App\Support\Storage\Arquivo;
 use App\Support\ValueObjects\UUID;
 
@@ -15,9 +16,11 @@ final readonly class CriaPortfolio
 
     public function executa(NovoPortfolioDTO $dto): Portfolio
     {
-        $midiaID = UUID::cria();
-        $midiaPath = $this->arquivo->persiste($dto->midia, '', "{$midiaID->recupera()}.webp", ['disk' => 'portfolios']);
+        $prestador = Prestador::where('uuid', $dto->prestadorUUID)->firstOrFail();
 
-        return Portfolio::query()->create([...$dto->toArray(), 'midia_path' => $midiaPath]);
+        $midiaID = UUID::cria();
+        $midiaPath = $this->arquivo->persiste($dto->midia, $prestador->uuid, "{$midiaID->recupera()}.webp", ['disk' => 'portfolios']);
+
+        return Portfolio::query()->create([...$dto->toArray($prestador->id), 'midia_path' => $midiaPath]);
     }
 }
