@@ -10,6 +10,9 @@ use App\Actions\Prestador\Portfolio\ExcluiPortfolio;
 use App\Actions\Prestador\Portfolio\ExibePortfolio;
 use App\DTO\Prestador\NovoPortfolioDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Prestador\Portfolio\StorePortfolioRequest;
+use App\Http\Requests\Prestador\Portfolio\UpdateFotoPortfolioRequest;
+use App\Http\Requests\Prestador\Portfolio\UpdatePortfolioRequest;
 use App\Http\Resources\Prestador\PortfolioResource;
 use App\Models\Prestador\Portfolio;
 use App\Models\Prestador\Prestador;
@@ -36,7 +39,7 @@ class PortfolioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Prestador $prestador, CriaPortfolio $action): JsonResponse
+    public function store(StorePortfolioRequest $request, Prestador $prestador, CriaPortfolio $action): JsonResponse
     {
         $dto = new NovoPortfolioDTO(
             prestadorUUID: $prestador->uuid,
@@ -50,7 +53,7 @@ class PortfolioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Portfolio $portfolio, EditaPortfolio $action): JsonResponse
+    public function update(UpdatePortfolioRequest $request, Portfolio $portfolio, EditaPortfolio $action): JsonResponse
     {
         Gate::authorize('update', $portfolio);
 
@@ -64,7 +67,7 @@ class PortfolioController extends Controller
     }
 
     // atualiza foto individualmente
-    public function updateFoto(Request $request, Portfolio $portfolio, EditaFotoPortfolio $action): JsonResponse
+    public function updateFoto(UpdateFotoPortfolioRequest $request, Portfolio $portfolio, EditaFotoPortfolio $action): JsonResponse
     {
         Gate::authorize('update', $portfolio);
 
