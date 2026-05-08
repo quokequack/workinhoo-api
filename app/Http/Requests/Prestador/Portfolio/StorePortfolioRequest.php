@@ -24,7 +24,7 @@ class StorePortfolioRequest extends FormRequest
     {
         return [
             'descricao' => 'required|string',
-            'midia'     => 'required|file|mimes:jpg,jpeg,png,webp,mp4|max:10240',
+            'midia' => 'required|file|mimes:jpg,jpeg,png,webp,mp4|max:10240',
         ];
     }
 
@@ -32,10 +32,10 @@ class StorePortfolioRequest extends FormRequest
     {
         return [
             'descricao.required' => 'A descrição é obrigatória.',
-            'midia.required'     => 'A mídia é obrigatória.',
-            'midia.file'         => 'A mídia deve ser um arquivo.',
-            'midia.mimes'        => 'A mídia deve ser jpg, jpeg, png, webp ou mp4.',
-            'midia.max'          => 'A mídia não pode ter mais de 10MB.',
+            'midia.required' => 'A mídia é obrigatória.',
+            'midia.file' => 'A mídia deve ser um arquivo.',
+            'midia.mimes' => 'A mídia deve ser jpg, jpeg, png, webp ou mp4.',
+            'midia.max' => 'A mídia não pode ter mais de 10MB.',
         ];
     }
 }

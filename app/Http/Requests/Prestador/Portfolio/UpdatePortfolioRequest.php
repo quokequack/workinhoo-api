@@ -24,7 +24,7 @@ class UpdatePortfolioRequest extends FormRequest
     {
         return [
             'descricao' => 'required|string',
-            'midia'     => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4|max:10240',
+            'midia' => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4|max:10240',
         ];
     }
 

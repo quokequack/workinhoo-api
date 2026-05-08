@@ -31,9 +31,9 @@ class UpdateFotoPortfolioRequest extends FormRequest
     {
         return [
             'midia.required' => 'A mídia é obrigatória.',
-            'midia.file'     => 'A mídia deve ser um arquivo.',
-            'midia.mimes'    => 'A mídia deve ser jpg, jpeg, png, webp ou mp4.',
-            'midia.max'      => 'A mídia não pode ter mais de 10MB.',
+            'midia.file' => 'A mídia deve ser um arquivo.',
+            'midia.mimes' => 'A mídia deve ser jpg, jpeg, png, webp ou mp4.',
+            'midia.max' => 'A mídia não pode ter mais de 10MB.',
         ];
     }
 }

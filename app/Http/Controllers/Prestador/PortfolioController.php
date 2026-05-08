@@ -82,5 +82,4 @@ class PortfolioController extends Controller
 
         return $this->semConteudo();
     }
-
 }
