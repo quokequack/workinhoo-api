@@ -12,8 +12,8 @@ final readonly class Arquivo
         return $arquivo->storeAs($path, $nome, $options);
     }
 
-    public function remove(string $path, string $nome): bool
+    public function remove(string $path, string $nome, ?string $disco = null): bool
     {
-        return Storage::delete("{$path}/{$nome}");
+        return Storage::disk($disco)->delete("{$path}/{$nome}");
     }
 }
