@@ -102,7 +102,7 @@ return [
         ],
     ],
 
-    'email_verification' => [
+    'token_ttl' => [
         'expire' => env('AUTH_EMAIL_VERIFICATION_EXPIRE', 60),
     ],
 

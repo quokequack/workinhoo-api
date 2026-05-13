@@ -27,11 +27,24 @@ DB_USERNAME=workinhoo
 DB_PASSWORD=secret
 ```
 
-Adicionar informacoes do servidor de email:
-
-Rodar php artisan queue:work
-
 > **Atenção:** o `DB_HOST` deve ser `workinhoo_db` ou o nome do serviço no Docker Compose, não `127.0.0.1`.
+
+4. Adicionar as credenciais do servidor de email de desenvolvimento no `.env`:
+
+```
+MAIL_MAILER=
+MAIL_SCHEME=
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME="
+```
+
+OBS: É preciso rodar o comando `php artisan queue:work` para enviar os emails.
+Faça isso dentro do container da aplicação `workinhoo_api` (seção seguinte).
+
 
 ## Subindo o projeto
 

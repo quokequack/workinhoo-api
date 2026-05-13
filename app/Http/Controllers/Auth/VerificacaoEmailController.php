@@ -2,38 +2,79 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Auth\ValidaEmailVerificado;
+use App\Actions\Auth\VerificaEmail;
 use App\Events\VerificarEmailEvent;
 use App\Http\Controllers\Controller;
-use App\Services\Auth\VerificarEmail\VerificacaoEmailTokenService;
+use App\Models\Usuario\EmailVerificationToken;
+use App\Services\Auth\TokenService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerificacaoEmailController extends Controller
 {
-    public function __construct(private readonly VerificacaoEmailTokenService $service) {}
+    public function __construct(
+        private readonly TokenService $tokenService,
+        public EmailVerificationToken $model,
+        public ValidaEmailVerificado  $emailVerificado,
+        private readonly VerificaEmail $verificaEmail) {}
 
-    public function enviaCodigo(string $email)
+    public function salvaCodigo(Request $request)
     {
-        $response = $this->service->enviaCodigo($email);
+        $email = $request->input('email');
 
-        if ($response) {
-            VerificarEmailEvent::dispatch(
-                $response['email'],
-                $response['nome'],
-                $response['codigo'],
-            );
+        if(!$email) {
+            return response()->json(['Email não informado!', Response::HTTP_BAD_REQUEST]);
         }
 
-        return $this->sucesso(['message' => 'Caso o cadastro exista e esteja pendente, você receberá um email de confirmação']);
+        if($this->emailVerificado->executa($email)) {
+            return response()->json(['Email já verificado!', Response::HTTP_NO_CONTENT]);
+        }
+
+        $response = $this->tokenService->salvaToken($this->model, $request->input('email'));
+
+        if(!$response) {
+            return response()->json(['Email não cadastrado!', Response::HTTP_NOT_FOUND]);
+        }
+        $this->enviaEmail($response);
     }
 
-    public function validaCodigo(string $codigoInformado)
+    private function enviaEmail($response)
     {
-        if (! $codigoInformado) {
+        try{
+            if ($response) {
+                VerificarEmailEvent::dispatch(
+                    $response['email'],
+                    $response['nome'],
+                    $response['codigo'],
+                );
+            }
+
+            return $this->sucesso(['message' => 'Email enviado']);
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function validaCodigo(Request $request)
+    {
+        $codigoInformado = $request->input('codigo');
+
+        if (!$codigoInformado) {
             return response()->json('Nenhum token foi informado!', Response::HTTP_BAD_REQUEST);
         }
 
-        $this->service->validaToken($codigoInformado);
+        try{
+            $this->tokenService->validaTokens($this->model, $codigoInformado);
+            $this->verificaEmail->executa($codigoInformado->email);
+            return $this->sucesso(['message' => 'Email verificado!']);
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
-        return $this->sucesso(['message' => 'E-mail verificado com sucesso']);
     }
 }

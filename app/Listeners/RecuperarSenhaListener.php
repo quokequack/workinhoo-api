@@ -8,17 +8,6 @@ use Illuminate\Support\Facades\Mail;
 
 class RecuperarSenhaListener
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Handle the event.
-     */
     public function handle(RecuperarSenhaEvent $evento): void
     {
         $email = new RecuperarSenhaMailable($evento->email, $evento->nome, $evento->codigo);

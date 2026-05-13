@@ -5,7 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Validation\ValidationException;
 
-class TokenResetSenhaInvalidoException extends Exception
+class TokenInvalidoException extends Exception
 {
 
     public static function exception() : ValidationException

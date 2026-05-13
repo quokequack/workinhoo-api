@@ -22,6 +22,13 @@ class EmailVerificationToken extends Model
         'created_at' => 'datetime',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'token' => 'hashed',
+        ];
+    }
+
     public static function porToken(string $token): ?EmailVerificationToken
     {
         return self::query()->where('token', $token)->first();
