@@ -6,7 +6,7 @@ use App\Models\Usuario\Usuario;
 
 class ValidaUsuarioPorEmail
 {
-    public function executa($email): ?Usuario
+    public function executa(string $email): ?Usuario
     {
         $usuario = Usuario::porEmail($email);
 

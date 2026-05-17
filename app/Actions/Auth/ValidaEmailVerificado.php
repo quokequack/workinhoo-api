@@ -10,10 +10,6 @@ class ValidaEmailVerificado
     {
         $usuario = Usuario::porEmail($email);
 
-        if ($usuario->email_verified_at != null) {
-            return true;
-        }
-
-        return false;
+        return $usuario->email_verified_at != null;
     }
 }

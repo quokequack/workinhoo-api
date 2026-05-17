@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Usuario\EmailVerificationToken;
-use App\Models\Usuario\Usuario;
 use Illuminate\Support\Facades\Mail;
 
 beforeEach(function () {
@@ -9,27 +7,18 @@ beforeEach(function () {
     $this->withHeaders(['Accept' => 'application/json']);
 });
 
-test('retorna 500 ao tentar confirmar email com token pelo fluxo atual', function () {
-    $usuario = Usuario::factory()->create([
-        'email' => 'usuario@example.com',
-        'email_verified_at' => null,
-    ]);
+test('retorna 422 quando token nao eh enviado no formato esperado', function () {
+    $response = $this->postJson('/api/auth/email/verificar', ['codigo' => 'token-valido']);
 
-    EmailVerificationToken::create([
-        'email' => $usuario->email,
-        'token' => 'token-valido',
-        'created_at' => now(),
-    ]);
-
-    $response = $this->post('/api/auth/email/verificar', ['codigo' => 'token-valido']);
-
-    $response->assertInternalServerError();
+    $response
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['token']);
 });
 
-test('retorna 500 para token invalido pelo fluxo atual', function () {
-    $response = $this->post('/api/auth/email/verificar', ['codigo' => 'token-invalido']);
+test('retorna erro para token invalido', function () {
+    $response = $this->postJson('/api/auth/email/verificar', ['token' => 'ffffffff']);
 
-    $response->assertInternalServerError();
+    $response->assertStatus(500);
 });
 
 test('reenvio retorna 500 para email inexistente pelo fluxo atual', function () {

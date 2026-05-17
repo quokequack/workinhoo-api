@@ -6,9 +6,11 @@ use App\Actions\Auth\ValidaEmailVerificado;
 use App\Actions\Auth\VerificaEmail;
 use App\Events\VerificarEmailEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\EmailRequest;
+use App\Http\Requests\Auth\TokenRequest;
 use App\Models\Usuario\EmailVerificationToken;
 use App\Services\Auth\TokenService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,13 +22,9 @@ class VerificacaoEmailController extends Controller
         public ValidaEmailVerificado $emailVerificado,
         private readonly VerificaEmail $verificaEmail) {}
 
-    public function salvaCodigo(Request $request)
+    public function salvaCodigo(EmailRequest $request): ?JsonResponse
     {
-        $email = $request->input('email');
-
-        if (! $email) {
-            return response()->json(['Email não informado!', Response::HTTP_BAD_REQUEST]);
-        }
+        $email = $request->validated('email');
 
         if ($this->emailVerificado->executa($email)) {
             return response()->json(['Email já verificado!', Response::HTTP_NO_CONTENT]);
@@ -37,16 +35,13 @@ class VerificacaoEmailController extends Controller
         if (! $response) {
             return response()->json(['Email não cadastrado!', Response::HTTP_NOT_FOUND]);
         }
-        $this->enviaEmail($response);
+
+        return $this->enviaEmail($response);
     }
 
-    public function validaCodigo(Request $request)
+    public function validaCodigo(TokenRequest $request): JsonResponse
     {
-        $codigoInformado = $request->input('codigo');
-
-        if (! $codigoInformado) {
-            return response()->json('Nenhum token foi informado!', Response::HTTP_BAD_REQUEST);
-        }
+        $codigoInformado = $request->validated('token');
 
         try {
             $this->tokenService->validaTokens($this->model, $codigoInformado);
@@ -60,7 +55,7 @@ class VerificacaoEmailController extends Controller
         }
     }
 
-    private function enviaEmail($response)
+    private function enviaEmail($response): JsonResponse
     {
         try {
             if ($response) {

@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class VerificaEmail
 {
-    public function executa(string $email)
+    public function executa(string $email): ?Usuario
     {
         $usuario = Usuario::porEmail($email);
 

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Events\RecuperarSenhaEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\EmailRequest;
+use App\Http\Requests\Auth\TokenRequest;
 use App\Models\Usuario\PasswordResetTokens;
 use App\Services\Auth\TokenService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,13 +16,9 @@ class RecuperacaoSenhaController extends Controller
 {
     public function __construct(private readonly TokenService $tokenService, private readonly PasswordResetTokens $model) {}
 
-    public function enviaCodigo(Request $request)
+    public function enviaCodigo(EmailRequest $request): JsonResponse
     {
-        $email = $request->input('email');
-
-        if (! $email) {
-            return response()->json('Email não informado!', Response::HTTP_BAD_REQUEST);
-        }
+        $email = $request->validated('email');
 
         $response = $this->tokenService->salvaToken($this->model, $email);
 
@@ -44,13 +42,9 @@ class RecuperacaoSenhaController extends Controller
 
     }
 
-    public function validaCodigo(Request $request)
+    public function validaCodigo(TokenRequest $request): JsonResponse
     {
-        $codigoInformado = $request->input('codigo');
-
-        if (! $codigoInformado) {
-            return response()->json('Nenhum token foi informado!', Response::HTTP_BAD_REQUEST);
-        }
+        $codigoInformado = $request->validated('codigo');
 
         try {
             $this->tokenService->validaTokens($this->model, $codigoInformado);

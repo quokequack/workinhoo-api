@@ -116,3 +116,11 @@ docker compose down -v
 | PHP-FPM (app) | `workinhoo_api` | 9000 (interno) |
 | Nginx | `workinhoo_nginx` | 8000 |
 | PostgreSQL 16 | `workinhoo_db` | 5432 (interno) |
+
+
+## Para validar o projeto antes de subir um novo commit
+Rode os comandos:
+
+1. ``` ./vendor/bin/pint ```
+2. ``` ./vendor/bin/pest  ```
+3. ``` ./vendor/bin/phpstan analyse --memory-limit=512M --error-format=github```
