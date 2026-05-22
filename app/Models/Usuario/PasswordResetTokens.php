@@ -29,11 +29,4 @@ class PasswordResetTokens extends Model
     {
         return PasswordResetTokens::where('token', $token)->first();
     }
-
-    public static function porEmail(string $email): ?PasswordResetTokens
-    {
-        return PasswordResetTokens::where('email', $email)->first();
-    }
-
-
 }

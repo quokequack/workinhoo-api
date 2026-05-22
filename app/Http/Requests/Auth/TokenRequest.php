@@ -14,17 +14,17 @@ class TokenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'codigo' => ['required', 'string', 'size:8', 'regex:/^[a-f0-9]{8}$/'],
+            'token' => ['required', 'string', 'size:8', 'regex:/^[a-f0-9]{8}$/'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'codigo.required' => 'O token é obrigatório.',
-            'codigo.string' => 'O token não é válido.',
-            'codigo.size' => 'O token deve ter 8 caracteres.',
-            'codigo.regex' => 'O token informado é inválido.',
+            'token.required' => 'O token é obrigatório.',
+            'token.string' => 'O token não é válido.',
+            'token.size' => 'O token deve ter 8 caracteres.',
+            'token.regex' => 'O token informado é inválido.',
         ];
     }
 }

@@ -13,7 +13,7 @@ class SalvaToken
             ['email' => $email],
             [
                 'token' => $token,
-                'created_at' => Carbon::now(),
+                'created_at' => Carbon::now()->format('d-m-Y H:i:s'),
             ],
         );
     }

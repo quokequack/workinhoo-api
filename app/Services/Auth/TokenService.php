@@ -8,8 +8,6 @@ use App\Actions\Auth\ValidaUsuarioPorEmail;
 use App\Exceptions\TokenInvalidoException;
 use App\Models\Usuario\EmailVerificationToken;
 use App\Models\Usuario\PasswordResetTokens;
-use App\Models\Usuario\Usuario;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class TokenService
@@ -29,23 +27,18 @@ class TokenService
         $codigo = $this->gerarCodigoConfirmacao();
         $this->salvaTokenAction->executa($model, $usuario->email, $codigo);
 
-        session([
-            'email_recuperacao' => $usuario->email,
-            'expires_at' => Carbon::now()->addMinutes(15)->toDateTimeString()
-        ]);
-
         return ['email' => $usuario->email, 'nome' => $usuario->nome, 'codigo' => $codigo];
     }
 
     public function validaTokens(PasswordResetTokens|EmailVerificationToken $model, string $token): ?string
     {
-        $ehValido = $this->validaTokenAction->executa($model, $token);
+        $tokenVerificacao = $this->validaTokenAction->executa($model, $token);
 
-        if (!$ehValido) {
+        if (! $tokenVerificacao) {
             throw TokenInvalidoException::exception();
         }
 
-        return $ehValido;
+        return $tokenVerificacao;
 
     }
 
