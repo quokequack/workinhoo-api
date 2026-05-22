@@ -51,6 +51,12 @@ class Usuario extends Authenticatable implements JWTSubject
         return self::query()->where('email', $email)->first();
     }
 
+
+    public static function porId(int $id): ?Usuario
+    {
+        return self::query()->where('id', $id)->first();
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

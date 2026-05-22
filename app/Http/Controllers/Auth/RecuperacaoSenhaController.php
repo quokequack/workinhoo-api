@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Events\RecuperarSenhaEvent;
+use App\Exceptions\UsuarioNaoEncontradoException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\EmailRequest;
 use App\Http\Requests\Auth\TokenRequest;
@@ -23,7 +24,7 @@ class RecuperacaoSenhaController extends Controller
         $response = $this->tokenService->salvaToken($this->model, $email);
 
         if (is_null($response)) {
-            return response()->json('Email não cadastrado!', Response::HTTP_NOT_FOUND);
+            throw UsuarioNaoEncontradoException::exception();
         }
 
         try {
@@ -36,8 +37,7 @@ class RecuperacaoSenhaController extends Controller
             return $this->sucesso(['message' => 'Email enviado']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->erro($e->getMessage());
         }
 
     }
@@ -48,12 +48,10 @@ class RecuperacaoSenhaController extends Controller
 
         try {
             $this->tokenService->validaTokens($this->model, $codigoInformado);
-
             return $this->sucesso(['message' => 'Código válido']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->erro($e->getMessage());
         }
     }
 }

@@ -17,8 +17,13 @@ abstract class Controller
         return response()->json($registro, Response::HTTP_CREATED);
     }
 
-    public function semConteudo(): JsonResponse
+    public function semConteudo(mixed $data = null): JsonResponse
     {
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json($data, Response::HTTP_NO_CONTENT);
+    }
+
+    public function erro(mixed $data = null): JsonResponse
+    {
+        return response()->json($data, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
