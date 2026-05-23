@@ -27,7 +27,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function forceTestingEnvironment(): void
     {
-        foreach ($this->testingEnvironment() as $key => $value) {
+        foreach ($this->testing_environment() as $key => $value) {
             putenv("{$key}={$value}");
 
             $_ENV[$key] = $value;
