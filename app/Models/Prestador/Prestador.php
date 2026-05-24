@@ -4,12 +4,14 @@ namespace App\Models\Prestador;
 
 use App\Models\Localizacao\Bairro;
 use App\Models\Localizacao\Cidade;
+use App\Models\Orcamento\PrestadorOrcamento;
 use App\Models\Usuario\Usuario;
 use App\Support\ValueObjects\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Prestador extends Model
 {
@@ -61,5 +63,9 @@ class Prestador extends Model
     public function bairros(): BelongsToMany
     {
         return $this->belongsToMany(Bairro::class, 'prestador_bairros');
+    }
+
+    public function solicitacoesOrcamento() : HasMany{
+        return $this->hasMany(PrestadorOrcamento::class, 'prestador_id', 'id');
     }
 }

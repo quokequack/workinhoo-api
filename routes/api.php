@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Localizacao\BairroController;
 use App\Http\Controllers\Localizacao\CidadeController;
+use App\Http\Controllers\Orcamento\SolicitacaoOrcamentoController;
 use App\Http\Controllers\Prestador\EspecialidadeController;
 use App\Http\Controllers\Prestador\PortfolioController;
 use App\Http\Controllers\SignupController;
@@ -25,5 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/{portfolio}/foto', [PortfolioController::class, 'updateFoto']);
         Route::delete('/{portfolio}/foto', [PortfolioController::class, 'destroyFoto']);
         Route::delete('/{portfolio}', [PortfolioController::class, 'destroy']);
+    });
+});
+
+Route::prefix('orcamentos')->group(function () {
+    Route::controller(SolicitacaoOrcamentoController::class)->group(function () {
+        Route::post('/nova-solicitacao', 'novaSolicitacao');
     });
 });

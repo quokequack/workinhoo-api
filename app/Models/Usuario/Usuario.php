@@ -2,9 +2,11 @@
 
 namespace App\Models\Usuario;
 
+use App\Models\Orcamento\PrestadorOrcamento;
 use App\Support\ValueObjects\UUID;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -60,5 +62,10 @@ class Usuario extends Authenticatable implements JWTSubject
             'email' => $this->email,
             'nome' => $this->nome,
         ];
+    }
+
+    public function solicitacoesOrcamento() : HasMany
+    {
+        return $this->hasMany(PrestadorOrcamento::class, 'solicitante_id', 'id');
     }
 }
