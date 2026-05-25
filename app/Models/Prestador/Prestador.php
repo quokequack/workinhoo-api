@@ -4,6 +4,7 @@ namespace App\Models\Prestador;
 
 use App\Models\Localizacao\Bairro;
 use App\Models\Localizacao\Cidade;
+use App\Models\Orcamento\Acordo;
 use App\Models\Orcamento\PrestadorOrcamento;
 use App\Models\Usuario\Usuario;
 use App\Support\ValueObjects\UUID;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Prestador extends Model
 {
@@ -68,5 +70,21 @@ class Prestador extends Model
     public function solicitacoesOrcamento(): HasMany
     {
         return $this->hasMany(PrestadorOrcamento::class, 'prestador_id', 'id');
+    }
+
+    public function acordos() : HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Acordo::class,
+            PrestadorOrcamento::class,
+            'prestador_id',
+            'id',
+            'orcamento_id',
+            'id');
+    }
+
+    public static function porId(int $id): Model
+    {
+        return self::query()->find($id);
     }
 }

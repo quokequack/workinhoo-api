@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Orcamento;
 
 use App\Actions\Orcamento\CriaSolicitacao;
+use App\Actions\Orcamento\ExibeAcordosPorUsuario;
 use App\Actions\Orcamento\RespondeSolicitacao;
 use App\DTO\Orcamento\RespostaOrcamentoDTO;
 use App\DTO\Orcamento\SolicitacaoOrcamentoDTO;
@@ -13,6 +14,7 @@ use App\Http\Requests\Orcamento\RespostaOrcamentoRequest;
 use App\Http\Requests\Orcamento\SolicitacaoOrcamentoRequest;
 use App\Models\Orcamento\PrestadorOrcamento;
 use App\Models\Usuario\Usuario;
+use App\Services\OrcamentoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -20,20 +22,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SolicitacaoOrcamentoController extends Controller
 {
-    public function __construct(private readonly CriaSolicitacao $criaSolicitacao, private readonly RespondeSolicitacao $respondeSolicitacao) {}
+    public function __construct(private readonly CriaSolicitacao $criaSolicitacao,
+                                private readonly RespondeSolicitacao $respondeSolicitacao,
+                                private readonly OrcamentoService $service,
+                                private readonly ExibeAcordosPorUsuario $exibeAcordosPorUsuario,) {}
 
     public function novaSolicitacao(SolicitacaoOrcamentoRequest $request): JsonResponse
     {
         try {
             $solicitacao = $this->criaSolicitacao->executa(SolicitacaoOrcamentoDTO::fromRequest($request));
-            $usuario = $solicitacao->usuarioPrestador;
-
-            if (! $usuario instanceof Usuario) {
-                throw new RuntimeException('Prestador sem usuario vinculado.');
-            }
-
-            $this->enviaEmailPrestador($usuario);
-
+            $this->enviaEmailPrestador($solicitacao);
             return $this->sucesso('Solicitação enviada com sucesso!');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -42,10 +40,15 @@ class SolicitacaoOrcamentoController extends Controller
         }
     }
 
-    private function enviaEmailPrestador(Usuario $prestador): JsonResponse|array
+    private function enviaEmailPrestador(PrestadorOrcamento $solicitacao): JsonResponse|array
     {
         try {
-            return NovaSolicitacaoOrcamentoEvent::dispatch($prestador->email, $prestador->nome);
+            $usuarioPrestador = $solicitacao->usuarioPrestador;
+
+            if (! $usuarioPrestador instanceof Usuario) {
+                throw new RuntimeException('Prestador sem usuario vinculado.');
+            }
+            return NovaSolicitacaoOrcamentoEvent::dispatch($usuarioPrestador->email, $usuarioPrestador->nome);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
@@ -82,6 +85,39 @@ class SolicitacaoOrcamentoController extends Controller
             Log::error($e->getMessage());
 
             return response()->json('Erro ao enviar email!', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function aceitaOrcamento(int $idSolicitacao): JsonResponse
+    {
+        try{
+            $this->service->aceitaOrcamento($idSolicitacao);
+            return $this->sucesso('Acordo criado!');
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function recusaOrcamento(int $idSolicitacao): JsonResponse
+    {
+        try{
+            $this->service->recusaOrcamento($idSolicitacao);
+            return $this->sucesso('Orçamento recusado com sucesso!');
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function acordosPorUsuario(int $idUsuario): JsonResponse
+    {
+        try{
+            $this->exibeAcordosPorUsuario->executa($idUsuario);
+            return $this->sucesso('Orçamento recusado com sucesso!');
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

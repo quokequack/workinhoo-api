@@ -33,5 +33,8 @@ Route::prefix('orcamentos')->group(function () {
     Route::controller(SolicitacaoOrcamentoController::class)->group(function () {
         Route::post('/nova-solicitacao', 'novaSolicitacao');
         Route::post('/nova-resposta', 'novaResposta');
+        Route::post('/aceitar/{idSolicitacao}', 'aceitaOrcamento');
+        Route::put('/recusar/{idSolicitacao}', 'recusaOrcamento');
+
     });
 });
