@@ -35,7 +35,7 @@ class SolicitacaoOrcamentoRequest extends FormRequest
             'prestador_id.required' => 'O prestador é obrigatório!',
             'especialidade_prestador_id.required' => 'A especialidade é obrigatória!',
             'descricao.required' => 'A descrição do trabalho é obrigatória!',
-            'descricao.string' => 'Descrição inválida!'
+            'descricao.string' => 'Descrição inválida!',
         ];
     }
 }

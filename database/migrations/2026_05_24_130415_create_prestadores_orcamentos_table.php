@@ -22,7 +22,6 @@ return new class extends Migration
             $table->longText('observacao_prestador')->nullable();
             $table->timestamps();
 
-
             $table->foreign('solicitante_id')->references('id')->on('usuarios');
             $table->foreign('prestador_id')->references('id')->on('prestadores');
             $table->foreign('especialidade_prestador_id')->references('id')->on('especialidades');

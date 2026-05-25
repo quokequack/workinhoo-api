@@ -13,7 +13,7 @@ class NovaSolicitacaoOrcamentoMailable extends Mailable
     use Queueable, SerializesModels;
 
     public function __construct(public readonly string $email,
-                                public readonly string $nome) {}
+        public readonly string $nome) {}
 
     public function envelope(): Envelope
     {
@@ -26,6 +26,9 @@ class NovaSolicitacaoOrcamentoMailable extends Mailable
     {
         return new Content(
             view: 'emails.nova_solicitacao_orcamento',
+            with: [
+                'nome' => $this->nome,
+            ],
         );
     }
 

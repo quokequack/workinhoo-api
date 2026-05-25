@@ -9,7 +9,7 @@ class RespostaOrcamentoDTO
     public function __construct(
         private float $valor,
         private ?string $obsevacao_prestador,
-    ){}
+    ) {}
 
     public static function fromRequest(RespostaOrcamentoRequest $request): RespostaOrcamentoDTO
     {

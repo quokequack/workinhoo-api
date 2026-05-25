@@ -32,7 +32,7 @@ class RespostaOrcamentoRequest extends FormRequest
         return [
             'valor.required' => 'O valor é obrigatório!',
             'valor.numeric' => 'Valor inválido!',
-            'valor.decimal' => 'O valor deve ser maior que R$0,00!'
+            'valor.decimal' => 'O valor deve ser maior que R$0,00!',
         ];
     }
 }

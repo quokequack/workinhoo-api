@@ -46,7 +46,7 @@ class Prestador extends Model
 
     public function usuario(): BelongsTo
     {
-        return $this->belongsTo(Usuario::class);
+        return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
     }
 
     public function cidade(): BelongsTo
@@ -65,7 +65,8 @@ class Prestador extends Model
         return $this->belongsToMany(Bairro::class, 'prestador_bairros');
     }
 
-    public function solicitacoesOrcamento() : HasMany{
+    public function solicitacoesOrcamento(): HasMany
+    {
         return $this->hasMany(PrestadorOrcamento::class, 'prestador_id', 'id');
     }
 }

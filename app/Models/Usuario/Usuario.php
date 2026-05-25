@@ -64,7 +64,7 @@ class Usuario extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function solicitacoesOrcamento() : HasMany
+    public function solicitacoesOrcamento(): HasMany
     {
         return $this->hasMany(PrestadorOrcamento::class, 'solicitante_id', 'id');
     }
