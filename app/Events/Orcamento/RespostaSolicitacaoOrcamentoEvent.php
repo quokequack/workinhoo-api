@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Orcamento;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -8,7 +8,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NovaSolicitacaoOrcamentoEvent
+class RespostaSolicitacaoOrcamentoEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -17,8 +17,9 @@ class NovaSolicitacaoOrcamentoEvent
      */
     public function __construct(
         public readonly string $email,
-        public readonly string $nomeProvedor,
-    ) {
+        public readonly string $nome,
+        public readonly string $prestador)
+    {
         //
     }
 

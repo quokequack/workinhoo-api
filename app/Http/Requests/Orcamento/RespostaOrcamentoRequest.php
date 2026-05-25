@@ -23,16 +23,20 @@ class RespostaOrcamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'valor' => 'required|decimal|gt:0',
+            'solicitacao_id' => 'required',
+            'valor' => 'required|numeric|gt:0',
+            'observacao_prestador' => 'nullable|string',
         ];
     }
 
     public function messages(): array
     {
         return [
+            'solicitacao_id.required' => 'O ID da solicitação é obrigatório!',
             'valor.required' => 'O valor é obrigatório!',
             'valor.numeric' => 'Valor inválido!',
-            'valor.decimal' => 'O valor deve ser maior que R$0,00!',
+            'valor.gt' => 'O valor deve ser maior que R$0,00!',
+            'observacao_prestador.string' => 'Observação inválida!',
         ];
     }
 }

@@ -7,15 +7,17 @@ use App\Http\Requests\Orcamento\RespostaOrcamentoRequest;
 class RespostaOrcamentoDTO
 {
     public function __construct(
+        public int $solicitacao_id,
         private float $valor,
-        private ?string $obsevacao_prestador,
+        private ?string $observacao_prestador,
     ) {}
 
     public static function fromRequest(RespostaOrcamentoRequest $request): RespostaOrcamentoDTO
     {
         return new self(
+            $request->validated('solicitacao_id'),
             $request->validated('valor'),
-            $request->input('obsevacao_prestador'),
+            $request->input('observacao_prestador'),
         );
     }
 
@@ -23,7 +25,7 @@ class RespostaOrcamentoDTO
     {
         return [
             'valor' => $this->valor,
-            'obsevacao_prestador' => $this->obsevacao_prestador,
+            'observacao_prestador' => $this->observacao_prestador,
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\NovaSolicitacaoOrcamentoEvent;
+use App\Events\Orcamento\NovaSolicitacaoOrcamentoEvent;
 use App\Events\RecuperarSenhaEvent;
 use App\Events\VerificarEmailEvent;
-use App\Listeners\NovaSolicitacaoOrcamentoListener;
+use App\Listeners\Orcamento\NovaSolicitacaoOrcamentoListener;
 use App\Listeners\RecuperarSenhaListener;
 use App\Listeners\VerificarEmailListener;
 use Illuminate\Support\Facades\Event;

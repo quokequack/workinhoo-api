@@ -1,7 +1,7 @@
 <?php
 
-use App\Events\NovaSolicitacaoOrcamentoEvent;
-use App\Mail\NovaSolicitacaoOrcamentoMailable;
+use App\Events\Orcamento\NovaSolicitacaoOrcamentoEvent;
+use App\Mail\Orcamento\NovaSolicitacaoOrcamentoMailable;
 use Illuminate\Support\Facades\Mail;
 
 test('evento de nova solicitacao de orcamento enfileira email para o prestador', function () {

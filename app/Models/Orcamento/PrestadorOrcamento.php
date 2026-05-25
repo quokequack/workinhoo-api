@@ -29,12 +29,7 @@ class PrestadorOrcamento extends Model
         return $this->hasOne(Usuario::class, 'id', 'solicitante_id');
     }
 
-    public function prestador(): HasOne
-    {
-        return $this->hasOne(Prestador::class, 'id', 'prestador_id');
-    }
-
-    public function usuario(): HasOneThrough
+    public function usuarioPrestador(): HasOneThrough
     {
         return $this->hasOneThrough(
             Usuario::class,
@@ -48,5 +43,10 @@ class PrestadorOrcamento extends Model
     public function especialidadePrestador(): HasOne
     {
         return $this->hasOne(PrestadorEspecialidade::class, 'id', 'especialidade_prestador_id');
+    }
+
+    public static function porId(int $id): ?PrestadorOrcamento
+    {
+        return PrestadorOrcamento::query()->find($id);
     }
 }
