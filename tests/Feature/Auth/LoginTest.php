@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Usuario\Usuario;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 
@@ -9,7 +10,6 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->withHeaders([
         'Accept' => 'application/json',
-        'Origin' => 'http://localhost',
     ]);
 });
 
@@ -19,10 +19,14 @@ test('login com credenciais válidas retorna 200 com dados do usuário', functio
         'password' => 'senha123',
     ]);
 
-    $response = $this->post('/api/auth/login', [
-        'credencial' => 'usuario@example.com',
-        'senha' => 'senha123',
-    ]);
+    $response = $this
+        ->withoutMiddleware(ValidateCsrfToken::class)
+        ->withSession([])
+        ->withHeader('Origin', 'http://localhost')
+        ->post('/api/auth/login', [
+            'credencial' => 'usuario@example.com',
+            'senha' => 'senha123',
+        ]);
 
     $response->assertOk()
         ->assertJson(fn (AssertableJson $json) => $json
