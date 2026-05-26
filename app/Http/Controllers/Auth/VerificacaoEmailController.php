@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Actions\Auth\ValidaEmailVerificado;
 use App\Actions\Auth\VerificaEmail;
 use App\Events\VerificarEmailEvent;
+use App\Exceptions\UsuarioNaoEncontradoException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\EmailRequest;
 use App\Http\Requests\Auth\TokenRequest;
@@ -12,7 +13,6 @@ use App\Models\Usuario\EmailVerificationToken;
 use App\Services\Auth\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
 
 class VerificacaoEmailController extends Controller
 {
@@ -27,13 +27,13 @@ class VerificacaoEmailController extends Controller
         $email = $request->validated('email');
 
         if ($this->emailVerificado->executa($email)) {
-            return response()->json(['Email já verificado!', Response::HTTP_NO_CONTENT]);
+            return $this->semConteudo('Email já verificado.');
         }
 
         $response = $this->tokenService->salvaToken($this->model, $request->input('email'));
 
         if (! $response) {
-            return response()->json(['Email não cadastrado!', Response::HTTP_NOT_FOUND]);
+            throw UsuarioNaoEncontradoException::exception();
         }
 
         return $this->enviaEmail($response);
@@ -51,7 +51,7 @@ class VerificacaoEmailController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->erro($e->getMessage());
         }
     }
 
@@ -70,7 +70,7 @@ class VerificacaoEmailController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->erro($e->getMessage());
         }
     }
 }

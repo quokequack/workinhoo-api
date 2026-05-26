@@ -33,4 +33,9 @@ class EmailVerificationToken extends Model
     {
         return self::query()->where('token', $token)->first();
     }
+
+    public static function porEmail(string $email): ?EmailVerificationToken
+    {
+        return self::query()->where('email', $email)->first();
+    }
 }

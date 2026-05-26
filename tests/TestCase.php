@@ -25,7 +25,7 @@ abstract class TestCase extends BaseTestCase
         return $app;
     }
 
-    protected function forceTestingEnvironment(): void
+    private function forceTestingEnvironment(): void
     {
         foreach ($this->testing_environment() as $key => $value) {
             putenv("{$key}={$value}");
@@ -38,7 +38,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * @return array<string, string>
      */
-    protected function testing_environment(): array
+    private function testing_environment(): array
     {
         return [
             'APP_ENV' => 'testing',
