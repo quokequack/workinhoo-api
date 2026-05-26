@@ -3,13 +3,11 @@
 namespace App\Actions\Orcamento;
 
 use App\Models\Orcamento\PrestadorOrcamento;
-use App\Models\Usuario\Usuario;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class ExibeAcordosPorUsuario
 {
-    public function executa(int $idUsuario) : Collection
+    public function executa(int $idUsuario): Collection
     {
         return PrestadorOrcamento::query()
             ->select(

@@ -23,7 +23,7 @@ class AlterarSenhaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'senha' => 'required|string'
+            'senha' => 'required|string',
         ];
     }
 

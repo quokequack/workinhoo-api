@@ -7,11 +7,11 @@ use App\Models\Orcamento\PrestadorOrcamento;
 
 class CriaAcordo
 {
-    public function executa(PrestadorOrcamento $solicitacao) : Acordo
+    public function executa(PrestadorOrcamento $solicitacao): Acordo
     {
         return Acordo::query()->create([
             'orcamento_id' => $solicitacao->id,
-            'finalizado' => false
+            'finalizado' => false,
         ]);
     }
 }

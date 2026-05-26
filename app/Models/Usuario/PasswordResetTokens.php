@@ -34,6 +34,4 @@ class PasswordResetTokens extends Model
     {
         return PasswordResetTokens::where('email', $email)->first();
     }
-
-
 }

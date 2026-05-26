@@ -1,10 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\RecuperacaoSenhaController;
 use App\Http\Controllers\Auth\VerificacaoEmailController;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\Auth\AlterarSenhaController;
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

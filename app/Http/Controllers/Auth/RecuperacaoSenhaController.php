@@ -11,7 +11,6 @@ use App\Models\Usuario\PasswordResetTokens;
 use App\Services\Auth\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
 
 class RecuperacaoSenhaController extends Controller
 {
@@ -37,6 +36,7 @@ class RecuperacaoSenhaController extends Controller
             return $this->sucesso(['message' => 'Email enviado']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return $this->erro($e->getMessage());
         }
 
@@ -48,9 +48,11 @@ class RecuperacaoSenhaController extends Controller
 
         try {
             $this->tokenService->validaTokens($this->model, $codigoInformado);
+
             return $this->sucesso(['message' => 'Código válido']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return $this->erro($e->getMessage());
         }
     }

@@ -2,15 +2,15 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Support\ItemNotFoundException;
-use Illuminate\Validation\ValidationException;
 
-class UsuarioNaoEncontradoException extends \Exception
+class UsuarioNaoEncontradoException extends Exception
 {
-    public static function exception(): ItemNotFoundException
+    public static function exception(): Exception
     {
-        return ItemNotFoundException::withMessages([
-            'usuario' => 'Usuário não encontrado!',
-        ]);
+        return new ItemNotFoundException(
+            'Usuário não encontrado!',
+        );
     }
 }

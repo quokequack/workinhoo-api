@@ -7,16 +7,16 @@ beforeEach(function () {
     $this->withHeaders(['Accept' => 'application/json']);
 });
 
-test('retorna 422 quando token nao eh enviado no formato esperado', function () {
+test('retorna 422 quando codigo nao eh enviado no formato esperado', function () {
     $response = $this->postJson('/api/auth/email/verificar', ['codigo' => 'token-valido']);
 
     $response
         ->assertUnprocessable()
-        ->assertJsonValidationErrors(['token']);
+        ->assertJsonValidationErrors(['codigo']);
 });
 
-test('retorna erro para token invalido', function () {
-    $response = $this->postJson('/api/auth/email/verificar', ['token' => 'ffffffff']);
+test('retorna erro para codigo invalido', function () {
+    $response = $this->postJson('/api/auth/email/verificar', ['codigo' => 'ffffffff']);
 
     $response->assertStatus(500);
 });

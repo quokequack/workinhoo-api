@@ -10,21 +10,21 @@ use Illuminate\Http\JsonResponse;
 
 class AlterarSenhaService
 {
+    public function __construct(private readonly AlteraSenha $alteraSenha) {}
 
-    public function __construct(private readonly AlteraSenha $alteraSenha){}
-
-    public function alterarSenha(string $senha) :JsonResponse|Usuario
+    public function alterarSenha(string $senha): JsonResponse|Usuario
     {
         $usuario = $this->recuperaUsuario();
-        if(!$usuario){
+        if (! $usuario) {
             throw UsuarioNaoEncontradoException::exception();
         }
 
         return $this->alteraSenha->executa($usuario, $senha);
     }
+
     private function recuperaUsuario(): ?Usuario
     {
-        if(!session()->has('email_recuperacao')){
+        if (! session()->has('email_recuperacao')) {
             throw TokenInvalidoException::exception();
         }
 

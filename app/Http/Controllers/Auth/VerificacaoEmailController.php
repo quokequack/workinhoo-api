@@ -13,7 +13,6 @@ use App\Models\Usuario\EmailVerificationToken;
 use App\Services\Auth\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
 
 class VerificacaoEmailController extends Controller
 {
@@ -51,6 +50,7 @@ class VerificacaoEmailController extends Controller
             return $this->sucesso(['message' => 'Email verificado!']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return $this->erro($e->getMessage());
         }
     }
@@ -69,6 +69,7 @@ class VerificacaoEmailController extends Controller
             return $this->sucesso(['message' => 'Email enviado']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return $this->erro($e->getMessage());
         }
     }

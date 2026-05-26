@@ -72,7 +72,7 @@ class Prestador extends Model
         return $this->hasMany(PrestadorOrcamento::class, 'prestador_id', 'id');
     }
 
-    public function acordos() : HasManyThrough
+    public function acordos(): HasManyThrough
     {
         return $this->hasManyThrough(
             Acordo::class,

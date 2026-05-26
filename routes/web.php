@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Auth\AlterarSenhaController;
 use App\Http\Controllers\Auth\RecuperacaoSenhaController;
-use App\Http\Controllers\Auth\VerificacaoEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

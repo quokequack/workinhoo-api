@@ -9,15 +9,17 @@ use Illuminate\Support\Facades\Log;
 
 class AlterarSenhaController extends Controller
 {
-    public function __construct(private readonly AlterarSenhaService $alterarSenhaService){}
+    public function __construct(private readonly AlterarSenhaService $alterarSenhaService) {}
 
     public function alterarSenha(AlterarSenhaRequest $request)
     {
         try {
             $this->alterarSenhaService->alterarSenha($request->validated('senha'));
+
             return $this->sucesso('Senha alterada com sucesso!');
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return $this->erro($e->getMessage());
         }
     }

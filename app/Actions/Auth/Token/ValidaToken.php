@@ -5,7 +5,6 @@ namespace App\Actions\Auth\Token;
 use App\Models\Usuario\EmailVerificationToken;
 use App\Models\Usuario\PasswordResetTokens;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
 class ValidaToken
@@ -14,11 +13,11 @@ class ValidaToken
     {
 
         $tokenExistente = $this->buscarTokenValido($model);
-        if(!$tokenExistente){
-           return false;
+        if (! $tokenExistente) {
+            return false;
         }
 
-        if(!Hash::check($token, $tokenExistente->token)){
+        if (! Hash::check($token, $tokenExistente->token)) {
             return false;
         }
 
@@ -32,10 +31,10 @@ class ValidaToken
 
     }
 
-    private function buscarTokenValido(PasswordResetTokens|EmailVerificationToken $model) : ?Model
+    private function buscarTokenValido(PasswordResetTokens|EmailVerificationToken $model): PasswordResetTokens|EmailVerificationToken|null
     {
 
-        if(!session()->has('email_recuperacao') || !session()->has('expires_at')){
+        if (! session()->has('email_recuperacao') || ! session()->has('expires_at')) {
             return null;
         }
 
@@ -43,10 +42,11 @@ class ValidaToken
 
         if (now()->gt($expires_at)) {
             session()->forget(['email_recuperacao', 'expires_at']);
+
             return null;
         }
 
-       return $model->porEmail(session('email_recuperacao'));
+        return $model->porEmail(session('email_recuperacao'));
 
     }
 }

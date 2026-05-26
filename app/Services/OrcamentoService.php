@@ -8,7 +8,6 @@ use App\Actions\Orcamento\RecusaOrcamento;
 use App\Exceptions\SolicitacaoNaoEncontradaException;
 use App\Models\Orcamento\Acordo;
 use App\Models\Orcamento\PrestadorOrcamento;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class OrcamentoService
@@ -17,26 +16,27 @@ class OrcamentoService
         private readonly CriaAcordo $criaAcordoAction,
         private readonly AceitaOrcamento $aceitaOrcamentoAction,
         private readonly RecusaOrcamento $recusaOrcamentoAction,
-    ){}
+    ) {}
 
-    public function aceitaOrcamento(int $idSolicitacao) : Acordo
+    public function aceitaOrcamento(int $idSolicitacao): Acordo
     {
         $solicitacao = PrestadorOrcamento::porId($idSolicitacao);
 
-        if(!$solicitacao){
+        if (! $solicitacao) {
             throw SolicitacaoNaoEncontradaException::exception();
         }
 
         return DB::transaction(function () use ($solicitacao) {
             $this->aceitaOrcamentoAction->executa($solicitacao);
+
             return $this->criaAcordoAction->executa($solicitacao);
         });
     }
 
-    public function recusaOrcamento(int $idSolicitacao) : PrestadorOrcamento
+    public function recusaOrcamento(int $idSolicitacao): PrestadorOrcamento
     {
         $solicitacao = PrestadorOrcamento::porId($idSolicitacao);
-        if(!$solicitacao){
+        if (! $solicitacao) {
             throw SolicitacaoNaoEncontradaException::exception();
         }
 
