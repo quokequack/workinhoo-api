@@ -35,6 +35,6 @@ Route::prefix('orcamentos')->group(function () {
         Route::post('/nova-resposta', 'novaResposta');
         Route::post('/aceitar/{idSolicitacao}', 'aceitaOrcamento');
         Route::put('/recusar/{idSolicitacao}', 'recusaOrcamento');
-
+        Route::get('/redirect/{idSolicitacao}', 'redirecionaWhatsapp');
     });
 });

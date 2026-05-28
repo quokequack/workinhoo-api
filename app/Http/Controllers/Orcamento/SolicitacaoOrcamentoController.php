@@ -16,6 +16,7 @@ use App\Models\Orcamento\PrestadorOrcamento;
 use App\Models\Usuario\Usuario;
 use App\Services\OrcamentoService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class SolicitacaoOrcamentoController extends Controller
     public function __construct(private readonly CriaSolicitacao $criaSolicitacao,
         private readonly RespondeSolicitacao $respondeSolicitacao,
         private readonly OrcamentoService $service,
-        private readonly ExibeAcordosPorUsuario $exibeAcordosPorUsuario, ) {}
+        private readonly ExibeAcordosPorUsuario $exibeAcordosPorUsuario) {}
 
     public function novaSolicitacao(SolicitacaoOrcamentoRequest $request): JsonResponse
     {
@@ -122,6 +123,18 @@ class SolicitacaoOrcamentoController extends Controller
             $this->exibeAcordosPorUsuario->executa($idUsuario);
 
             return $this->sucesso('Orçamento recusado com sucesso!');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function redirecionaWhatsapp(int $idSolicitacao): JsonResponse|RedirectResponse
+    {
+        try{
+            $url = $this->service->redirecionaWhatsapp($idSolicitacao);
+            return redirect()->away($url);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

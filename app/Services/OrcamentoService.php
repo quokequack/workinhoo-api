@@ -42,4 +42,31 @@ class OrcamentoService
 
         return $this->recusaOrcamentoAction->executa($solicitacao);
     }
+
+    public function redirecionaWhatsapp(int $idSolicitacao): string
+    {
+        $solicitacao = PrestadorOrcamento::porId($idSolicitacao);
+        $celular = $solicitacao->usuarioPrestador->contato;
+        $celularFormatado = $this->formatoInternacionalCelular($celular);
+
+        $celularFormatado = ltrim($celularFormatado, '+');
+        return "https://wa.me/{$celularFormatado}?text=" . urlencode('Olá!');
+    }
+
+    private function formatoInternacionalCelular(string $celular) : string
+    {
+        $limpo = preg_replace('/\D/', '', $celular);
+
+        $limpo = ltrim($limpo, '0');
+
+        if(strlen($limpo) === 11){
+            return '+55' . $limpo;
+        }
+
+        if(strlen($limpo) === 13 && str_starts_with($limpo, '55')){
+            return '+' . $limpo;
+        }
+
+        return '+' . ltrim($limpo, '+');
+    }
 }
