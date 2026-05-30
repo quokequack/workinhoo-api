@@ -41,11 +41,11 @@ class VerificacaoEmailController extends Controller
 
     public function validaCodigo(TokenRequest $request): JsonResponse
     {
-        $codigoInformado = $request->validated('token');
+        $codigoInformado = $request->validated('codigo');
 
         try {
             $this->tokenService->validaTokens($this->model, $codigoInformado);
-            $this->verificaEmail->executa($codigoInformado->email);
+            $this->verificaEmail->executa((string) session('email_recuperacao'));
 
             return $this->sucesso(['message' => 'Email verificado!']);
         } catch (\Exception $e) {

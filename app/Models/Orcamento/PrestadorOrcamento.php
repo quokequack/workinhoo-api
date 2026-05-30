@@ -29,6 +29,9 @@ class PrestadorOrcamento extends Model
         return $this->hasOne(Usuario::class, 'id', 'solicitante_id');
     }
 
+    /**
+     * @return HasOneThrough<Usuario, Prestador, $this>
+     */
     public function usuarioPrestador(): HasOneThrough
     {
         return $this->hasOneThrough(

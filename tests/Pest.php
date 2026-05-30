@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,6 +18,15 @@ use Tests\TestCase;
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature', 'Integration');
+
+beforeEach(function () {
+    config([
+        'view.paths' => [resource_path('views')],
+        'logging.default' => 'null',
+    ]);
+
+    $this->withoutMiddleware(VerifyCsrfToken::class);
+});
 
 /*
 |--------------------------------------------------------------------------

@@ -132,8 +132,9 @@ class SolicitacaoOrcamentoController extends Controller
 
     public function redirecionaWhatsapp(int $idSolicitacao): JsonResponse|RedirectResponse
     {
-        try{
+        try {
             $url = $this->service->redirecionaWhatsapp($idSolicitacao);
+
             return redirect()->away($url);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

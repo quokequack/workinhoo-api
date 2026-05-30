@@ -8,7 +8,9 @@ use App\Actions\Orcamento\RecusaOrcamento;
 use App\Exceptions\SolicitacaoNaoEncontradaException;
 use App\Models\Orcamento\Acordo;
 use App\Models\Orcamento\PrestadorOrcamento;
+use App\Models\Usuario\Usuario;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class OrcamentoService
 {
@@ -46,27 +48,34 @@ class OrcamentoService
     public function redirecionaWhatsapp(int $idSolicitacao): string
     {
         $solicitacao = PrestadorOrcamento::porId($idSolicitacao);
-        $celular = $solicitacao->usuarioPrestador->contato;
+        $usuarioPrestador = $solicitacao?->usuarioPrestador;
+
+        if (! $usuarioPrestador instanceof Usuario) {
+            throw new RuntimeException('Prestador sem usuario vinculado.');
+        }
+
+        $celular = $usuarioPrestador->contato;
         $celularFormatado = $this->formatoInternacionalCelular($celular);
 
         $celularFormatado = ltrim($celularFormatado, '+');
-        return "https://wa.me/{$celularFormatado}?text=" . urlencode('Olá!');
+
+        return "https://wa.me/{$celularFormatado}?text=".urlencode('Olá!');
     }
 
-    private function formatoInternacionalCelular(string $celular) : string
+    private function formatoInternacionalCelular(string $celular): string
     {
         $limpo = preg_replace('/\D/', '', $celular);
 
         $limpo = ltrim($limpo, '0');
 
-        if(strlen($limpo) === 11){
-            return '+55' . $limpo;
+        if (strlen($limpo) === 11) {
+            return '+55'.$limpo;
         }
 
-        if(strlen($limpo) === 13 && str_starts_with($limpo, '55')){
-            return '+' . $limpo;
+        if (strlen($limpo) === 13 && str_starts_with($limpo, '55')) {
+            return '+'.$limpo;
         }
 
-        return '+' . ltrim($limpo, '+');
+        return '+'.ltrim($limpo, '+');
     }
 }
