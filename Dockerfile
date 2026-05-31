@@ -61,7 +61,6 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER www
 
-EXPOSE 9000
-
+EXPOSE 8000
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["php-fpm"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
