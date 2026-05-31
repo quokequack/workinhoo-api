@@ -1,0 +1,31 @@
+FROM php:8.4-fpm-alpine
+
+RUN apk add --no-cache \
+        libpq-dev \
+        icu-dev \
+        icu-libs \
+        linux-headers \
+    && docker-php-ext-install \
+        pdo_pgsql \
+        pgsql \
+        pcntl \
+        bcmath \
+        intl \
+        opcache \
+    && apk del --no-cache linux-headers \
+    && rm -rf /tmp/*
+
+RUN apk add --no-cache composer
+
+RUN addgroup -g 1000 www && adduser -u 1000 -G www -s /bin/sh -D www
+
+WORKDIR /var/www
+
+COPY --chown=www:www . .
+
+RUN chown -R www:www storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+USER www
+
+CMD ["php", "artisan", "queue:work", "--tries=3"]
