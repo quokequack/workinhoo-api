@@ -6,9 +6,6 @@ if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-interaction --prefer-dist
 fi
 
-echo "[entrypoint] Generating app key if missing..."
-php artisan key:generate --force
-
 echo "[entrypoint] Running migrations..."
 php artisan migrate --force
 
