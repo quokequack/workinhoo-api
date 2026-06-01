@@ -23,7 +23,7 @@ class GeraReciboRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data_servico' => ['required', 'date', 'before_or_equal:today'],
+            'data_servico' => ['required', 'date'],
         ];
     }
 }

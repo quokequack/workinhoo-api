@@ -24,7 +24,7 @@ readonly class ReciboDTO
     {
         return [
             'acordo_id'    => $this->acordo_id,
-            'data_servico' => $this->data_servico,
+            'data_servico' => $this->data_servico->format('Y-m-d'),
         ];
     }
 }
