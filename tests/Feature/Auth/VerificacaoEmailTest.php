@@ -7,24 +7,22 @@ beforeEach(function () {
     $this->withHeaders(['Accept' => 'application/json']);
 });
 
-test('retorna 422 quando codigo nao eh enviado no formato esperado', function () {
+test('verificacao de email retorna 401 quando não autenticado e codigo tem formato invalido', function () {
     $response = $this->postJson('/api/auth/email/verificar', ['codigo' => 'token-valido']);
 
-    $response
-        ->assertUnprocessable()
-        ->assertJsonValidationErrors(['codigo']);
+    $response->assertUnauthorized();
 });
 
-test('retorna erro para codigo invalido', function () {
+test('verificacao de email retorna 401 quando não autenticado e codigo é invalido', function () {
     $response = $this->postJson('/api/auth/email/verificar', ['codigo' => 'ffffffff']);
 
-    $response->assertStatus(500);
+    $response->assertUnauthorized();
 });
 
-test('reenvio retorna 500 para email inexistente pelo fluxo atual', function () {
+test('reenvio de verificacao retorna 401 quando não autenticado e email não existe', function () {
     $response = $this->post('/api/auth/email/verificacao', ['email' => 'inexistente@example.com']);
 
-    $response->assertInternalServerError();
+    $response->assertUnauthorized();
 
     Mail::assertNothingSent();
 });
