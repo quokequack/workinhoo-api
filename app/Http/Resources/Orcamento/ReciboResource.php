@@ -17,8 +17,8 @@ class ReciboResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'           => $this->id,
-            'acordo_id'    => $this->acordo_id,
+            'id' => $this->id,
+            'acordo_id' => $this->acordo_id,
             'data_servico' => $this->data_servico,
         ];
     }

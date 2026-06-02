@@ -23,7 +23,7 @@ readonly class ReciboDTO
     public function toArray(): array
     {
         return [
-            'acordo_id'    => $this->acordo_id,
+            'acordo_id' => $this->acordo_id,
             'data_servico' => $this->data_servico->format('Y-m-d'),
         ];
     }
