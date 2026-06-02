@@ -10,19 +10,24 @@ use App\Http\Resources\Orcamento\ReciboResource;
 use App\Models\Orcamento\Acordo;
 use App\Models\Orcamento\Recibo;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class ReciboController extends Controller
 {
-
     public function show(Recibo $recibo): JsonResponse
     {
         return $this->sucesso(ReciboResource::make($recibo));
     }
 
-
     public function store(GeraReciboRequest $request, Acordo $acordo, GeraRecibo $action): JsonResponse
     {
+        Gate::authorize('podeGerarRecibo', $acordo);
+
         $dto = ReciboDTO::fromRequest($request, $acordo->id);
+
+        if ($acordo->finalizado) {
+            return response()->json(['message' => 'Este acordo já foi finalizado.'], 422);
+        }
 
         $recibo = $action->executa($dto);
 
