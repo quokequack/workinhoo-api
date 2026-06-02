@@ -21,13 +21,7 @@ class ReciboController extends Controller
 
     public function store(GeraReciboRequest $request, Acordo $acordo, GeraRecibo $action): JsonResponse
     {
-        Gate::authorize('podeGerarRecibo', $acordo);
-
         $dto = ReciboDTO::fromRequest($request, $acordo->id);
-
-        if ($acordo->finalizado) {
-            return response()->json(['message' => 'Este acordo já foi finalizado.'], 422);
-        }
 
         $recibo = $action->executa($dto);
 
