@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Localizacao\BairroController;
 use App\Http\Controllers\Localizacao\CidadeController;
+use App\Http\Controllers\Orcamento\ReciboController;
 use App\Http\Controllers\Orcamento\SolicitacaoOrcamentoController;
 use App\Http\Controllers\Prestador\EspecialidadeController;
 use App\Http\Controllers\Prestador\PortfolioController;
@@ -24,9 +25,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{portfolio}', [PortfolioController::class, 'show'])->whereUuid('portfolio');
         Route::put('/{portfolio}', [PortfolioController::class, 'update']);
         Route::patch('/{portfolio}/foto', [PortfolioController::class, 'updateFoto']);
-        Route::delete('/{portfolio}/foto', [PortfolioController::class, 'destroyFoto']);
         Route::delete('/{portfolio}', [PortfolioController::class, 'destroy']);
     });
+
+    // Recibos e Finalização
+    Route::get('/recibos/{recibo}', [ReciboController::class, 'show']);
+    Route::post('/acordos/{acordo}/finalizar', [ReciboController::class, 'store']);
 });
 
 Route::prefix('orcamentos')->group(function () {
