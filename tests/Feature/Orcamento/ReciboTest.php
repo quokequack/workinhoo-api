@@ -21,6 +21,7 @@ beforeEach(function () {
 
     $this->orcamento = PrestadorOrcamento::factory()->create([
         'prestador_id' => $this->prestador->id,
+        'aceito' => true,
     ]);
 
     $this->acordo = Acordo::factory()->create([
@@ -62,6 +63,20 @@ test('deve retornar erro 422 se a data do serviço for inválida', function () {
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['data_servico']);
+});
+
+test('deve retornar erro 422 se tentar finalizar um acordo cujo orçamento não foi aceito', function () {
+    $this->orcamento->update(['aceito' => false]);
+
+    $payload = [
+        'data_servico' => '2026-06-01',
+    ];
+
+    $response = $this->actingAs($this->usuarioLogado, 'sanctum')
+        ->postJson("/api/acordos/{$this->acordo->id}/finalizar", $payload);
+
+    $response->assertStatus(422)
+        ->assertJsonPath('message', 'O orçamento precisa estar aceito para gerar um recibo.');
 });
 
 test('deve retornar erro 422 se tentar finalizar um acordo que já foi finalizado', function () {
