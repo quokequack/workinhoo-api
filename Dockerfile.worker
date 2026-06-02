@@ -53,4 +53,4 @@ RUN chown -R www:www storage bootstrap/cache \
 
 USER www
 
-CMD ["php", "artisan", "queue:work", "--tries=3"]
+CMD ["php", "artisan", "queue:work"]
