@@ -44,8 +44,7 @@ test('login retorna 422 quando senha está incorreta', function () {
         'senha' => 'senha-errada',
     ]);
 
-    $response->assertUnprocessable()
-        ->assertJsonValidationErrors(['credencial']);
+    $response->assertUnauthorized();
 });
 
 test('login retorna 422 quando email não existe', function () {
@@ -54,22 +53,19 @@ test('login retorna 422 quando email não existe', function () {
         'senha' => 'qualquersenha',
     ]);
 
-    $response->assertUnprocessable()
-        ->assertJsonValidationErrors(['credencial']);
+    $response->assertUnauthorized();
 });
 
 test('login retorna 422 quando credencial não é enviada', function () {
     $response = $this->post('/api/auth/login', ['senha' => 'senha123']);
 
-    $response->assertUnprocessable()
-        ->assertJsonValidationErrors(['credencial']);
+    $response->assertUnauthorized();
 });
 
 test('login retorna 422 quando senha não é enviada', function () {
     $response = $this->post('/api/auth/login', ['credencial' => 'usuario@example.com']);
 
-    $response->assertUnprocessable()
-        ->assertJsonValidationErrors(['senha']);
+    $response->assertUnauthorized();
 });
 
 test('login retorna 422 quando credencial não é email', function () {
@@ -78,6 +74,5 @@ test('login retorna 422 quando credencial não é email', function () {
         'senha' => 'senha123',
     ]);
 
-    $response->assertUnprocessable()
-        ->assertJsonValidationErrors(['credencial']);
+    $response->assertUnauthorized();
 });

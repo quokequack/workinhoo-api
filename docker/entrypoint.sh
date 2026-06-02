@@ -6,13 +6,13 @@ if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-interaction --prefer-dist
 fi
 
-if [ -z "$(grep '^APP_KEY=.\+' .env 2>/dev/null)" ]; then
-    echo "[entrypoint] Generating application key..."
-    php artisan key:generate
-fi
-
 echo "[entrypoint] Running migrations..."
 php artisan migrate --force
+
+echo "[entrypoint] Optimizing..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
 echo "[entrypoint] Ready."
 
