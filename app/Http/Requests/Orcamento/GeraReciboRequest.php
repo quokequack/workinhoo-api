@@ -22,16 +22,17 @@ class GeraReciboRequest extends FormRequest
 
         if (! $acordo->orcamento?->aceito) {
             throw new HttpResponseException(response()->json([
-                'message' => 'O orçamento precisa estar aceito para gerar um recibo.'
+                'message' => 'O orçamento precisa estar aceito para gerar um recibo.',
             ], 422));
         }
 
         // 3. Estado do Acordo: Intervém e força o 422 se já estiver encerrado
         if ($acordo->finalizado) {
             throw new HttpResponseException(response()->json([
-                'message' => 'Este acordo já foi finalizado.'
+                'message' => 'Este acordo já foi finalizado.',
             ], 422));
         }
+
         return true;
     }
 

@@ -10,7 +10,6 @@ use App\Http\Resources\Orcamento\ReciboResource;
 use App\Models\Orcamento\Acordo;
 use App\Models\Orcamento\Recibo;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 
 class ReciboController extends Controller
 {
