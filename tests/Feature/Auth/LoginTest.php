@@ -12,7 +12,7 @@ beforeEach(function () {
     ]);
 });
 
-test('login retorna 401 quando não autenticado mesmo com credenciais válidas', function () {
+test('login autentica com credenciais válidas', function () {
     $usuario = Usuario::factory()->create([
         'email' => 'usuario@example.com',
         'password' => 'senha123',
@@ -27,10 +27,16 @@ test('login retorna 401 quando não autenticado mesmo com credenciais válidas',
             'senha' => 'senha123',
         ]);
 
-    $response->assertUnauthorized();
+    $response->assertOk()
+        ->assertJson([
+            'uuid' => $usuario->uuid,
+            'nome' => $usuario->nome,
+            'email' => $usuario->email,
+            'is_prestador' => $usuario->is_prestador,
+        ]);
 });
 
-test('login retorna 401 quando não autenticado e senha está incorreta', function () {
+test('login retorna 422 quando senha está incorreta', function () {
     Usuario::factory()->create(['email' => 'usuario@example.com']);
 
     $response = $this->post('/api/auth/login', [
@@ -38,35 +44,40 @@ test('login retorna 401 quando não autenticado e senha está incorreta', functi
         'senha' => 'senha-errada',
     ]);
 
-    $response->assertUnauthorized();
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['credencial']);
 });
 
-test('login retorna 401 quando não autenticado e email não existe', function () {
+test('login retorna 422 quando email não existe', function () {
     $response = $this->post('/api/auth/login', [
         'credencial' => 'naoexiste@example.com',
         'senha' => 'qualquersenha',
     ]);
 
-    $response->assertUnauthorized();
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['credencial']);
 });
 
-test('login retorna 401 quando não autenticado e credencial não é enviada', function () {
+test('login retorna 422 quando credencial não é enviada', function () {
     $response = $this->post('/api/auth/login', ['senha' => 'senha123']);
 
-    $response->assertUnauthorized();
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['credencial']);
 });
 
-test('login retorna 401 quando não autenticado e senha não é enviada', function () {
+test('login retorna 422 quando senha não é enviada', function () {
     $response = $this->post('/api/auth/login', ['credencial' => 'usuario@example.com']);
 
-    $response->assertUnauthorized();
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['senha']);
 });
 
-test('login retorna 401 quando não autenticado e credencial não é email', function () {
+test('login retorna 422 quando credencial não é email', function () {
     $response = $this->post('/api/auth/login', [
         'credencial' => 'nao-e-email',
         'senha' => 'senha123',
     ]);
 
-    $response->assertUnauthorized();
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['credencial']);
 });

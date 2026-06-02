@@ -43,16 +43,15 @@ class VerificacaoEmailController extends Controller
     {
         $codigoInformado = $request->validated('codigo');
 
-        try {
-            $this->tokenService->validaTokens($this->model, $codigoInformado);
-            $this->verificaEmail->executa((string) session('email_recuperacao'));
+        $this->tokenService->validaTokens($this->model, $codigoInformado);
 
-            return $this->sucesso(['message' => 'Email verificado!']);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
+        $usuario = $this->verificaEmail->executa((string) session('email_recuperacao'));
 
-            return $this->erro($e->getMessage());
+        if (! $usuario) {
+            throw UsuarioNaoEncontradoException::exception();
         }
+
+        return $this->sucesso(['message' => 'Email verificado!']);
     }
 
     private function enviaEmail($response): JsonResponse
