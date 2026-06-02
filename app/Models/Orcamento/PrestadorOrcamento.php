@@ -5,12 +5,15 @@ namespace App\Models\Orcamento;
 use App\Models\Prestador\Prestador;
 use App\Models\Prestador\PrestadorEspecialidade;
 use App\Models\Usuario\Usuario;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class PrestadorOrcamento extends Model
 {
+    use HasFactory;
+
     protected $table = 'prestadores_orcamentos';
 
     protected $fillable = [
